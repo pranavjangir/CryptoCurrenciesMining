@@ -5,7 +5,6 @@ import edu.nyu.crypto.blockchain.NetworkStatistics;
 
 public class MajorityMiner extends CompliantMiner implements Miner {
 
-    protected Block garbage_block;
     
     public MajorityMiner(String id, int hashRate, int connectivity) {
         super(id, hashRate, connectivity);
@@ -13,7 +12,6 @@ public class MajorityMiner extends CompliantMiner implements Miner {
     public void blockMined(Block block, boolean isMinerMe) {
         if(isMinerMe) {
             if (block.getHeight() > currentHead.getHeight()) {
-                this.garbage_block = this.currentHead;
                 this.currentHead = block;
             }
         }
