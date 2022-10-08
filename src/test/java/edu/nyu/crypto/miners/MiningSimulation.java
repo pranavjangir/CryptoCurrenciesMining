@@ -65,6 +65,7 @@ public class MiningSimulation {
 
         ChurnFunction churn = new NormalChurnFunction(1, 1, new SimulationRandom(1234));
         Map<String, Double> relativeProfits = runSimulation(miners, BlockReward.ONE, churn);
+        System.out.println(relativeProfits.get(attacker.getId()));
         Assertions.assertThat(relativeProfits.get(attacker.getId())).isGreaterThan(.98);
     }
 
@@ -80,6 +81,7 @@ public class MiningSimulation {
         SimulationRandom rng = new SimulationRandom(2345);
         ChurnFunction churn = new NormalChurnFunction(5, 5, rng);
         Map<String, Double> relativeProfits = runSimulation(miners, BlockReward.ONE, churn);
+        System.out.println(relativeProfits.get(attacker.getId()));
         Assertions.assertThat(relativeProfits.get(attacker.getId())).isGreaterThan(.6);
     }
 
