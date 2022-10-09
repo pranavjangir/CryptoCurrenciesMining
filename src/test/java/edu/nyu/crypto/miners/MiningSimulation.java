@@ -160,12 +160,12 @@ public class MiningSimulation {
      */
 
     private Map<String, Double> runSimulation(Collection<Miner> miners, BlockReward rewardFunction, ChurnFunction churnFunction) {
-        int numIterations = 100;
+        int numIterations = 1;
         BitcoinNetwork networkController = new BitcoinNetwork(rewardFunction, churnFunction, 0.005, 0.02d);
         Map<String, Double> profits = new TreeMap<>();
         SimulationRandom rng = new SimulationRandom(2345);
         for (int i = 0; i < numIterations; ++i) {
-            int numBlocks = (int) rng.sampleExponentialRandom(0.0001);
+            int numBlocks = (int) rng.sampleExponentialRandom(0.001);
             rewardFunction.reset();
             miners.forEach(miner -> miner.resetHashRate());
             miners.forEach(miner -> miner.resetConnectivity());

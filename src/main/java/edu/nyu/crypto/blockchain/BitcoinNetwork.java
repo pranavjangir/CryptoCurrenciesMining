@@ -82,23 +82,28 @@ public class BitcoinNetwork {
         LOGGER.debug("Simulation finished with block mining distribution {}",minedRewards);
         return miners.stream().map(Miner::currentHead).max(Comparator.comparing(Block::getHeight)).get();
     }
-
+    int rnd;
 
     private void propagateBlock(Map<BlockMessage, Double> initialMessages, Collection<Miner> miners) {
 
         Set<BlockMessage> deliveredMessages = new HashSet<>(miners.size());
-
         Map<BlockMessage, Double> messageQueue = initialMessages;
-
+        rnd = rnd + 1;
         int minHeight = 0;
-
+        System.out.println("Round : " + rnd);
+        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         while (!messageQueue.isEmpty()) {
             BlockMessage message = messageQueue.entrySet().stream().min(Entry.comparingByValue()).get().getKey();
             message.deliver();
             deliveredMessages.add(message);
+            System.out.println(message.recipient);
+
             double currentTime = messageQueue.remove(message);
             Miner sender = message.recipient;
             Block broadcastBlock = sender.currentHead();
+
+            System.out.println(broadcastBlock.toString());
+            System.out.println("********************************----------*************--------********");
             if (broadcastBlock.getHeight() >= minHeight) {
                 minHeight = broadcastBlock.getHeight();
                 miners.stream()
