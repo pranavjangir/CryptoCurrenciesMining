@@ -16,7 +16,7 @@ public class MajorityMiner extends CompliantMiner implements Miner {
             }
         }
         else {
-            if (block.getHeight() > currentHead.getHeight() + 10) {
+            if (block.getHeight() > currentHead.getHeight() + 100) {
                 this.currentHead = block;
             }
         }

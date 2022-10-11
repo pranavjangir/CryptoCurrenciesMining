@@ -97,6 +97,7 @@ public class MiningSimulation {
 
         Map<String, Double> relativeProfits = runSimulation(miners, BlockReward.ONE, ChurnFunction.NO_CHURN);
         double attackerProfits = relativeProfits.get(attacker.getId());
+        System.out.println(attackerProfits);
         Assertions.assertThat(attackerProfits).isGreaterThan(.415);
     }
 
@@ -113,6 +114,7 @@ public class MiningSimulation {
         ChurnFunction churn = new NormalChurnFunction(1, 1, new SimulationRandom(3456));
         Map<String, Double> relativeProfits = runSimulation(miners, BlockReward.ONE, churn);
         double attackerProfits = relativeProfits.get(attacker.getId());
+        System.out.println(attackerProfits);
         Assertions.assertThat(attackerProfits).isGreaterThan(.35);
     }
 
@@ -160,12 +162,12 @@ public class MiningSimulation {
      */
 
     private Map<String, Double> runSimulation(Collection<Miner> miners, BlockReward rewardFunction, ChurnFunction churnFunction) {
-        int numIterations = 1;
+        int numIterations = 100;
         BitcoinNetwork networkController = new BitcoinNetwork(rewardFunction, churnFunction, 0.005, 0.02d);
         Map<String, Double> profits = new TreeMap<>();
         SimulationRandom rng = new SimulationRandom(2345);
         for (int i = 0; i < numIterations; ++i) {
-            int numBlocks = (int) rng.sampleExponentialRandom(0.001);
+            int numBlocks = (int) rng.sampleExponentialRandom(0.0001);
             rewardFunction.reset();
             miners.forEach(miner -> miner.resetHashRate());
             miners.forEach(miner -> miner.resetConnectivity());
