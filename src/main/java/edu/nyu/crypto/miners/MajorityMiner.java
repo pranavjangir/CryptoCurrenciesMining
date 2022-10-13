@@ -5,6 +5,7 @@ import edu.nyu.crypto.blockchain.NetworkStatistics;
 
 public class MajorityMiner extends CompliantMiner implements Miner {
 
+    protected NetworkStatistics netstats;
     
     public MajorityMiner(String id, int hashRate, int connectivity) {
         super(id, hashRate, connectivity);
@@ -16,10 +17,20 @@ public class MajorityMiner extends CompliantMiner implements Miner {
             }
         }
         else {
-            if (block.getHeight() > currentHead.getHeight() + 100) {
+            double relative_hash = (double)((double)this.getHashRate() / (double)netstats.getTotalHashRate());
+            if (block.getHeight() > currentHead.getHeight() && relative_hash < 0.5) {
                 this.currentHead = block;
             }
         }
+    }
+
+    public void initialize(Block genesis, NetworkStatistics networkStatistics) {
+        this.currentHead = genesis;
+        this.netstats = networkStatistics;
+    }
+
+    public void networkUpdate(NetworkStatistics statistics) {
+        netstats = statistics;
     }
 
 	// TODO Override methods to implement Majority Mining
