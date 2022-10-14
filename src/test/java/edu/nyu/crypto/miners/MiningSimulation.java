@@ -131,6 +131,7 @@ public class MiningSimulation {
         BlockReward reward = new LognormalReward(new SimulationRandom(8765));
         Map<String, Double> relativeProfits = runSimulation(miners, reward, ChurnFunction.NO_CHURN);
         double attackerProfits = relativeProfits.get(attacker.getId());
+        System.out.println(attackerProfits);
         Assertions.assertThat(attackerProfits).isGreaterThan(.33);
     }
 
@@ -149,6 +150,7 @@ public class MiningSimulation {
         ChurnFunction churn = new NormalChurnFunction(0.5, 1, rng);
         Map<String, Double> relativeProfits = runSimulation(miners, reward, churn);
         double attackerProfits = relativeProfits.get(attacker.getId());
+        System.out.println(attackerProfits);
         Assertions.assertThat(attackerProfits).isGreaterThan(.31);
     }
 
