@@ -33,16 +33,12 @@ public class SelfishMiner extends CompliantMiner implements Miner {
 			}
 		}
 		else {
+			// System.out.println(currentHead.getHeight() - block.getHeight());
 			double relative_conn = this.getConnectivity();
 			double relative_hash = (double)((double)this.getHashRate() / (double)netstats.getTotalHashRate());
 			relative_conn = relative_conn / ((double)netstats.getTotalConnectivity());
 //			System.out.println("conn ==========: " + relative_conn);
 //			System.out.println("hashpower    ===========:    " + relative_hash);
-//
-//			if (relative_conn < 0.9) {
-//				this.resetHashRate();
-//				this.resetConnectivity();
-//			}
 //			System.out.println("conn : " + relative_conn);
 //			System.out.println("hash : " + relative_hash);
 			if (block.getHeight() < currentHead.getHeight() - 1) {
@@ -93,6 +89,7 @@ public class SelfishMiner extends CompliantMiner implements Miner {
 	public void initialize(Block genesis, NetworkStatistics networkStatistics) {
 		this.currentHead = genesis;
 		this.prev = genesis;
+		all_my_blocks.clear();
 		all_my_blocks.addLast(genesis);
 		this.netstats = networkStatistics;
 	}
