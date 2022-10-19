@@ -27,7 +27,6 @@ public class SelfishMiner extends CompliantMiner implements Miner {
 	public void blockMined(Block block, boolean isMinerMe) {
 		if(isMinerMe) {
 			if (block.getHeight() > currentHead.getHeight()) {
-				//this.prev = currentHead;
 				this.currentHead = block;
 				all_my_blocks.addLast(currentHead);
 			}
@@ -37,10 +36,6 @@ public class SelfishMiner extends CompliantMiner implements Miner {
 			double relative_conn = this.getConnectivity();
 			double relative_hash = (double)((double)this.getHashRate() / (double)netstats.getTotalHashRate());
 			relative_conn = relative_conn / ((double)netstats.getTotalConnectivity());
-//			System.out.println("conn ==========: " + relative_conn);
-//			System.out.println("hashpower    ===========:    " + relative_hash);
-//			System.out.println("conn : " + relative_conn);
-//			System.out.println("hash : " + relative_hash);
 			if (block.getHeight() < currentHead.getHeight() - 1) {
 				if (relative_conn < 0.5 && relative_hash < 0.25) {
 					System.out.println("Actually gets here!!!");
@@ -50,9 +45,6 @@ public class SelfishMiner extends CompliantMiner implements Miner {
 						Block b = all_my_blocks.removeFirst();
 						if (b.getHeight() > block.getHeight()) {
 							all_my_blocks.addFirst(b);
-//							if (relative_conn <= 0.7) {
-//								prev = b;
-//							}
 							break;
 						}
 						prev = b;
@@ -60,16 +52,13 @@ public class SelfishMiner extends CompliantMiner implements Miner {
 				}
 			}
 			else if (block.getHeight() == currentHead.getHeight() - 1) {
-				if (relative_conn <= 0.7 || relative_hash < 0.25) {
+				if (relative_conn <= 0.6 || relative_hash < 0.30) {
 					this.prev = this.currentHead;
 				} else {
 					while(!all_my_blocks.isEmpty()) {
 						Block b = all_my_blocks.removeFirst();
 						if (b.getHeight() > block.getHeight()) {
 							all_my_blocks.addFirst(b);
-//							if (relative_conn <= 0.7) {
-//								prev = b;
-//							}
 							break;
 						}
 						prev = b;
