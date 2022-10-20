@@ -119,6 +119,24 @@ public class MiningSimulation {
     }
 
     @Test
+    public void simulateSelfishMining3() {
+
+        LOGGER.info("Simulating selfish miner at 31%, with churn");
+
+        List<Miner> miners = makeCompliantMiners(ImmutableList.of(150, 150, 100, 100, 100));
+
+        Miner attacker = new SelfishMiner("Attacker", 270, 60);
+        miners.add(attacker);
+
+        ChurnFunction churn = new NormalChurnFunction(5, 5, new SimulationRandom(3456));
+        Map<String, Double> relativeProfits = runSimulation(miners, BlockReward.ONE, churn);
+        double attackerProfits = relativeProfits.get(attacker.getId());
+        System.out.println(attackerProfits);
+        Assertions.assertThat(attackerProfits).isGreaterThan(.35);
+    }
+
+
+    @Test
     public void simulateFeeSniping1() {
 
         LOGGER.info("Simulating fee sniping miner at 30%, with churn");
@@ -147,11 +165,30 @@ public class MiningSimulation {
 
         SimulationRandom rng = new SimulationRandom(5678);
         BlockReward reward = new LognormalReward(rng);
-        ChurnFunction churn = new NormalChurnFunction(0.5, 1, rng);
+        ChurnFunction churn = new NormalChurnFunction(1, 1, rng);
         Map<String, Double> relativeProfits = runSimulation(miners, reward, churn);
         double attackerProfits = relativeProfits.get(attacker.getId());
         System.out.println(attackerProfits);
         Assertions.assertThat(attackerProfits).isGreaterThan(.31);
+    }
+
+    @Test
+    public void simulateFeeSniping3() {
+
+        LOGGER.info("Simulating fee sniping miner at 27%, with churn");
+
+        List<Miner> miners = makeCompliantMiners(ImmutableList.of(220, 190, 150, 130, 20));
+
+        Miner attacker = new FeeSnipingMiner("Attacker", 270, 1);
+        miners.add(attacker);
+
+        SimulationRandom rng = new SimulationRandom(5678);
+        BlockReward reward = new LognormalReward(rng);
+        ChurnFunction churn = new NormalChurnFunction(1, 1, rng);
+        Map<String, Double> relativeProfits = runSimulation(miners, reward, churn);
+        double attackerProfits = relativeProfits.get(attacker.getId());
+        System.out.println(attackerProfits);
+        Assertions.assertThat(attackerProfits).isGreaterThan(.29);
     }
 
     /**

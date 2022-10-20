@@ -26,21 +26,19 @@ public class FeeSnipingMiner extends CompliantMiner implements Miner {
     public void blockMined(Block block, boolean isMinerMe) {
         if(isMinerMe) {
             if (block.getHeight() > local_head.getHeight()) {
+                // this.prev = local_head;
                 this.local_head = block;
             }
         }
         else {
             double relative_hash = (double)((double)this.getHashRate() / (double)netstats.getTotalHashRate());
-            if (block.getHeight() > local_head.getHeight() + 1) {
-                this.local_head = block;
-                return;
-            }
-            if (block.getHeight() == local_head.getHeight() + 1) {
-                double block_reward_threshold = 2.0 / (relative_hash * relative_hash) - 5.0;
+            if (block.getHeight() >= local_head.getHeight() + 1) {
+                double block_reward_threshold = 2.0 / (relative_hash * relative_hash) - 6.0;
                 block_reward_threshold = Math.max(block_reward_threshold, 0.0);
                 // TODO(pranav): If possible try to incorporate the block reward distribution parameters.
                 if (block.getBlockValue() > block_reward_threshold) {
                     // Do nothing, let us try to fork!
+                    this.local_head = block.getPreviousBlock();
                 } else {
                     this.local_head = block;
                 }
@@ -53,6 +51,7 @@ public class FeeSnipingMiner extends CompliantMiner implements Miner {
         this.currentHead = genesis;
         this.local_head = genesis;
         this.netstats = networkStatistics;
+        // this.prev = genesis;
     }
 
     public void networkUpdate(NetworkStatistics statistics) {
