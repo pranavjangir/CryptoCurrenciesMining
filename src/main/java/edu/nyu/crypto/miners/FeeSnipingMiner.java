@@ -36,7 +36,7 @@ public class FeeSnipingMiner extends CompliantMiner implements Miner {
                 return;
             }
             if (block.getHeight() == local_head.getHeight() + 1) {
-                double block_reward_threshold = 2.0 / (relative_hash * relative_hash) - 3.0;
+                double block_reward_threshold = 2.0 / (relative_hash * relative_hash) - 5.0;
                 block_reward_threshold = Math.max(block_reward_threshold, 0.0);
                 // TODO(pranav): If possible try to incorporate the block reward distribution parameters.
                 if (block.getBlockValue() > block_reward_threshold) {
